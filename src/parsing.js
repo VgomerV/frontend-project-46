@@ -1,8 +1,12 @@
 import { readFileSync } from 'node:fs';
+import yaml from 'js-yaml';
 
-export default (file) => {
+export default (file, ex) => {
   const dataFromFile = readFileSync(file).toString();
-  const parseFile = JSON.parse(dataFromFile);
 
-  return parseFile;
+  if (ex === 'json') {
+    return JSON.parse(dataFromFile);
+  } else {
+    return yaml.load(dataFromFile);
+  }
 };

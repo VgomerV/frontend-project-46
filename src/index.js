@@ -2,8 +2,10 @@ import _ from 'lodash';
 import parsing from './parsing.js';
 
 export default (path1, path2) => {
-  const dataFromFile1 = parsing(path1);
-  const dataFromFile2 = parsing(path2);
+  const extension = path1.split('.')[0];
+
+  const dataFromFile1 = parsing(path1, extension);
+  const dataFromFile2 = parsing(path2, extension);
 
   const keys1 = Object.keys(dataFromFile1);
   const keys2 = Object.keys(dataFromFile2);
