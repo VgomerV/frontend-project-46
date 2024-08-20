@@ -11,23 +11,21 @@ export default (path1, path2) => {
   const unionArray = _.union(keys1, keys2)
     .sort((a, b) => a.localeCompare(b));
 
-  let result = '{\n';
-
-  for (const key of unionArray) {
+  const result = unionArray.reduce((acc, key) => {
     if (!Object.hasOwn(dataFromFile1, key)) {
-      result = `${result}  + ${key}: ${dataFromFile2[key]}\n`;
-      continue;
-    }
-
-    if (!Object.hasOwn(dataFromFile2, key)) {
-      result = `${result}  - ${key}: ${dataFromFile1[key]}\n`;
+      acc.push(`  + ${key}: ${dataFromFile2[key]}\n`);
+    } else if (!Object.hasOwn(dataFromFile2, key)) {
+      acc.push(`  - ${key}: ${dataFromFile1[key]}\n`);
     } else if (dataFromFile1[key] === dataFromFile2[key]) {
-      result = `${result}    ${key}: ${dataFromFile1[key]}\n`;
+      acc.push(`    ${key}: ${dataFromFile1[key]}\n`);
     } else {
-      result = `${result}  - ${key}: ${dataFromFile1[key]}\n  + ${key}: ${dataFromFile2[key]}\n`;
+      acc.push(`  - ${key}: ${dataFromFile1[key]}\n`);
+      acc.push(`  + ${key}: ${dataFromFile2[key]}\n`);
     }
-  }
 
-  result = `${result}}`;
-  return result;
+    return acc;
+  }, ['{\n']);
+
+  result.push('}');
+  return result.join('');
 };
