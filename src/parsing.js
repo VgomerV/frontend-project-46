@@ -6,7 +6,7 @@ export default (file, ex) => {
 
   if (ex === 'json') {
     return JSON.parse(dataFromFile);
-  } else {
-    return yaml.load(dataFromFile);
   }
+
+  return yaml.load(dataFromFile);
 };
