@@ -22,71 +22,36 @@ const getAST = (data1, data2) => {
   const keys = _.union(keysFromFile1, keysFromFile2)
     .sort((keys1, keys2) => keys1.localeCompare(keys2));
 
-  const resultAST = keys.reduce((acc, key) => {
-    const data1IsObject = Object.hasOwn(data1, key);
-    const data2IsObject = Object.hasOwn(data2, key);
-
+  return keys.reduce((acc, key) => {
     const value1 = data1[key];
     const value2 = data2[key];
 
-    const value1IsObject = _.isObject(value1);
-    const value2IsObject = _.isObject(value2);
-
-    if (!data1IsObject) {
-      acc.push({
-        node: key,
-        valueAfter: iter(value2),
-        status: 'added',
-      });
-
+    if (!Object.hasOwn(data1, key)) {
+      acc.push({ node: key, valueAfter: iter(value2), status: 'added' });
       return acc;
     }
 
-    if (!data2IsObject) {
-      acc.push({
-        node: key,
-        valueBefore: iter(value1),
-        status: 'removed',
-      });
-
+    if (!Object.hasOwn(data2, key)) {
+      acc.push({ node: key, valueBefore: iter(value1), status: 'removed' });
       return acc;
     }
 
     if (_.isEqual(value1, value2)) {
-      acc.push({
-        node: key,
-        valueBefore: iter(value1),
-        status: 'unchanged',
-      });
-
+      acc.push({ node: key, valueBefore: iter(value1), status: 'unchanged' });
       return acc;
     }
 
-    if ((!value1IsObject || !value2IsObject) && !_.isEqual(value1, value2)) {
+    if ((!_.isObject(value1) || !_.isObject(value2)) && !_.isEqual(value1, value2)) {
       acc.push({
-        node: key,
-        valueBefore: iter(value1),
-        valueAfter: iter(value2),
-        status: 'updated',
+        node: key, valueBefore: iter(value1), valueAfter: iter(value2), status: 'updated',
       });
-
       return acc;
     }
 
-    if ((value1IsObject && value2IsObject) && !_.isEqual(value1, value2)) {
-      acc.push({
-        node: key,
-        valueBefore: getAST(value1, value2),
-        status: 'unchanged',
-      });
-
-      return acc;
-    }
+    acc.push({ node: key, valueBefore: getAST(value1, value2), status: 'unchanged' });
 
     return acc;
   }, []);
-
-  return resultAST;
 };
 
 const genDiff = (file1, file2, format) => {

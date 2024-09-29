@@ -5,27 +5,26 @@ const getPath = (AST) => {
     if (_.isObject(value)) {
       return '[complex value]';
     }
-
     return typeof value === 'string' ? `'${value}'` : value;
   };
 
   const { status } = AST;
   const message = [];
 
-  if (status === 'added') {
-    message.push(`was added with value: ${getFormatValue(AST.valueAfter)}`);
-    return [message];
+  switch (status) {
+    case 'added':
+      message.push(`was added with value: ${getFormatValue(AST.valueAfter)}`);
+      break;
+    case 'removed':
+      message.push('was removed');
+      break;
+    case 'updated':
+      message.push(`was updated. From ${getFormatValue(AST.valueBefore)} to ${getFormatValue(AST.valueAfter)}`);
+      break;
+    default:
+      break;
   }
 
-  if (status === 'removed') {
-    message.push('was removed');
-    return [message];
-  }
-
-  if (status === 'updated') {
-    message.push(`was updated. From ${getFormatValue(AST.valueBefore)} to ${getFormatValue(AST.valueAfter)}`);
-    return [message];
-  }
   return [message];
 };
 
