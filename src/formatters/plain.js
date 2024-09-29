@@ -1,30 +1,19 @@
 import _ from 'lodash';
 
 const getPath = (AST) => {
-  let valueBefore = '';
-  let valueAfter = '';
+  const getFormatValue = (value) => {
+    if (_.isObject(value)) {
+      return '[complex value]';
+    }
 
-  if (_.isObject(AST.valueBefore)) {
-    valueBefore = '[complex value]';
-  } else if (typeof AST.valueBefore === 'string') {
-    valueBefore = `'${AST.valueBefore}'`;
-  } else {
-    valueBefore = AST.valueBefore;
-  }
-
-  if (_.isObject(AST.valueAfter)) {
-    valueAfter = '[complex value]';
-  } else if (typeof AST.valueAfter === 'string') {
-    valueAfter = `'${AST.valueAfter}'`;
-  } else {
-    valueAfter = AST.valueAfter;
-  }
+    return typeof value === 'string' ? `'${value}'` : value;
+  };
 
   const { status } = AST;
   const message = [];
 
   if (status === 'added') {
-    message.push(`was added with value: ${valueAfter}`);
+    message.push(`was added with value: ${getFormatValue(AST.valueAfter)}`);
     return [message];
   }
 
@@ -34,18 +23,18 @@ const getPath = (AST) => {
   }
 
   if (status === 'updated') {
-    message.push(`was updated. From ${valueBefore} to ${valueAfter}`);
+    message.push(`was updated. From ${getFormatValue(AST.valueBefore)} to ${getFormatValue(AST.valueAfter)}`);
     return [message];
   }
   return [message];
 };
 
 export default (file) => {
-  const toPrint2 = (data, arr) => {
+  const toPrint = (data, arr) => {
     const result = data.reduce((acc, item) => {
       arr.push(item.node);
       if (_.isArray(item.valueBefore) && item.status === 'unchanged') {
-        acc.push(toPrint2(item.valueBefore, arr));
+        acc.push(toPrint(item.valueBefore, arr));
         arr.pop();
         return acc;
       }
@@ -61,5 +50,5 @@ export default (file) => {
     return result.join('\n');
   };
 
-  return toPrint2(file, []);
+  return toPrint(file, []);
 };
