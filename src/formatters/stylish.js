@@ -18,27 +18,29 @@ export default (file) => {
         status,
       } = AST;
 
+      const getValue = (flag) => {
+        switch (flag) {
+          case 'added':
+            return !_.isArray(valueAfter) ? valueAfter : toPrint(valueAfter, depth + 1);
+          case 'removed':
+            return !_.isArray(valueBefore) ? valueBefore : toPrint(valueBefore, depth + 1);
+          default:
+            return !_.isArray(valueBefore) ? valueBefore : toPrint(valueBefore, depth + 1);
+        }
+      };
+
       if (status === 'unchanged') {
-        acc.push(`${separator.repeat(depth * 4)}${node}: ${!_.isArray(valueBefore) ? valueBefore : toPrint(valueBefore, depth + 1)}\n`);
-        return acc;
-      }
-
-      if (status === 'added') {
-        acc.push(`${separator.repeat(depth * 4 - 2)}${marker[status]} ${node}: ${!_.isArray(valueAfter) ? valueAfter : toPrint(valueAfter, depth + 1)}\n`);
-        return acc;
-      }
-
-      if (status === 'removed') {
-        acc.push(`${separator.repeat(depth * 4 - 2)}${marker[status]} ${node}: ${!_.isArray(valueBefore) ? valueBefore : toPrint(valueBefore, depth + 1)}\n`);
+        acc.push(`${separator.repeat(depth * 4)}${node}: ${getValue(status)}\n`);
         return acc;
       }
 
       if (status === 'updated') {
-        acc.push(`${separator.repeat(depth * 4 - 2)}${marker.removed} ${node}: ${!_.isArray(valueBefore) ? valueBefore : toPrint(valueBefore, depth + 1)}\n`);
-        acc.push(`${separator.repeat(depth * 4 - 2)}${marker.added} ${node}: ${!_.isArray(valueAfter) ? valueAfter : toPrint(valueAfter, depth + 1)}\n`);
-
+        acc.push(`${separator.repeat(depth * 4 - 2)}${marker.removed} ${node}: ${getValue('removed')}\n`);
+        acc.push(`${separator.repeat(depth * 4 - 2)}${marker.added} ${node}: ${getValue('added')}\n`);
         return acc;
       }
+
+      acc.push(`${separator.repeat(depth * 4 - 2)}${marker[status]} ${node}: ${getValue(status)}\n`);
 
       return acc;
     }, ['{\n']);
