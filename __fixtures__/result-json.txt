@@ -3,35 +3,35 @@
     "common": [
       {
         "follow": false,
-        "type": "added"
+        "nodeType": "added"
       },
       {
         "setting1": "Value 1",
-        "type": "unchanged"
+        "nodeType": "unchanged"
       },
       {
         "setting2": 200,
-        "type": "removed"
+        "nodeType": "removed"
       },
       {
         "setting3": {
           "valueDeleted": true,
           "valueAdded": null
         },
-        "type": "updated"
+        "nodeType": "updated"
       },
       {
         "setting4": "blah blah",
-        "type": "added"
+        "nodeType": "added"
       },
       {
         "setting5": [
           {
             "key5": "value5",
-            "type": "unchanged"
+            "nodeType": "unchanged"
           }
         ],
-        "type": "added"
+        "nodeType": "added"
       },
       {
         "setting6": [
@@ -42,24 +42,24 @@
                   "valueDeleted": "",
                   "valueAdded": "so much"
                 },
-                "type": "updated"
+                "nodeType": "updated"
               }
             ],
-            "type": "unchanged"
+            "nodeType": "unchanged"
           },
           {
             "key": "value",
-            "type": "unchanged"
+            "nodeType": "unchanged"
           },
           {
             "ops": "vops",
-            "type": "added"
+            "nodeType": "added"
           }
         ],
-        "type": "unchanged"
+        "nodeType": "unchanged"
       }
     ],
-    "type": "unchanged"
+    "nodeType": "unchanged"
   },
   {
     "group1": [
@@ -68,44 +68,44 @@
           "valueDeleted": "bas",
           "valueAdded": "bars"
         },
-        "type": "updated"
+        "nodeType": "updated"
       },
       {
         "foo": "bar",
-        "type": "unchanged"
+        "nodeType": "unchanged"
       },
       {
         "nest": {
           "valueDeleted": [
             {
               "key": "value",
-              "type": "unchanged"
+              "nodeType": "unchanged"
             }
           ],
           "valueAdded": "str"
         },
-        "type": "updated"
+        "nodeType": "updated"
       }
     ],
-    "type": "unchanged"
+    "nodeType": "unchanged"
   },
   {
     "group2": [
       {
         "abc": 12345,
-        "type": "unchanged"
+        "nodeType": "unchanged"
       },
       {
         "deep": [
           {
             "id": 45,
-            "type": "unchanged"
+            "nodeType": "unchanged"
           }
         ],
-        "type": "unchanged"
+        "nodeType": "unchanged"
       }
     ],
-    "type": "removed"
+    "nodeType": "removed"
   },
   {
     "group3": [
@@ -115,19 +115,19 @@
             "id": [
               {
                 "number": 45,
-                "type": "unchanged"
+                "nodeType": "unchanged"
               }
             ],
-            "type": "unchanged"
+            "nodeType": "unchanged"
           }
         ],
-        "type": "unchanged"
+        "nodeType": "unchanged"
       },
       {
         "fee": 100500,
-        "type": "unchanged"
+        "nodeType": "unchanged"
       }
     ],
-    "type": "added"
+    "nodeType": "added"
   }
 ]

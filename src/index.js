@@ -11,7 +11,7 @@ const iter = (value) => {
   const entries = Object.entries(value);
   const result = entries.map((item) => {
     const [nodeName, val] = item;
-    return { [nodeName]: iter(val), type: 'unchanged' };
+    return { [nodeName]: iter(val), nodeType: 'unchanged' };
   });
 
   return result;
@@ -28,27 +28,27 @@ const getAST = (data1, data2) => {
     const value2 = data2[key];
 
     if (!Object.hasOwn(data1, key)) {
-      acc.push({ [key]: iter(value2), type: 'added' });
+      acc.push({ [key]: iter(value2), nodeType: 'added' });
       return acc;
     }
 
     if (!Object.hasOwn(data2, key)) {
-      acc.push({ [key]: iter(value1), type: 'removed' });
+      acc.push({ [key]: iter(value1), nodeType: 'removed' });
       return acc;
     }
 
     if (_.isEqual(value1, value2)) {
-      acc.push({ [key]: value1, type: 'unchanged' });
+      acc.push({ [key]: value1, nodeType: 'unchanged' });
       return acc;
     }
 
     if (_.isPlainObject(value1) && _.isPlainObject(value2)) {
-      acc.push({ [key]: getAST(value1, value2), type: 'unchanged' });
+      acc.push({ [key]: getAST(value1, value2), nodeType: 'unchanged' });
       return acc;
     }
 
     acc.push({
-      [key]: { valueDeleted: iter(value1), valueAdded: iter(value2) }, type: 'updated',
+      [key]: { valueDeleted: iter(value1), valueAdded: iter(value2) }, nodeType: 'updated',
     });
 
     return acc;

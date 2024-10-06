@@ -13,7 +13,7 @@ const getPath = (obj) => {
 
   const message = [];
 
-  switch (obj.type) {
+  switch (obj.nodeType) {
     case 'added':
       message.push(`was added with value: ${getFormatValue(obj[key])}`);
       break;
@@ -38,7 +38,7 @@ export default (file) => {
 
       arr.push(key);
 
-      if (_.isArray(node[key]) && node.type === 'unchanged') {
+      if (_.isArray(node[key]) && node.nodeType === 'unchanged') {
         acc.push(toPrint(node[key], arr));
         arr.pop();
         return acc;

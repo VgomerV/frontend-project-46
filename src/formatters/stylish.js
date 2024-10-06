@@ -19,20 +19,20 @@ export default (file) => {
       const entries = Object.keys(node);
       const [key] = entries;
 
-      const spaceCount = getRepeatIn(node.type, depth);
+      const spaceCount = getRepeatIn(node.nodeType, depth);
 
-      if (node.type === 'unchanged') {
+      if (node.nodeType === 'unchanged') {
         acc.push(`${separator.repeat(spaceCount)}${key}: ${toPrint(node[key], depth + 1)}\n`);
         return acc;
       }
 
-      if (node.type === 'updated') {
+      if (node.nodeType === 'updated') {
         acc.push(`${separator.repeat(spaceCount)}${marker.removed} ${key}: ${toPrint(node[key].valueDeleted, depth + 1)}\n`);
         acc.push(`${separator.repeat(spaceCount)}${marker.added} ${key}: ${toPrint(node[key].valueAdded, depth + 1)}\n`);
         return acc;
       }
 
-      acc.push(`${separator.repeat(spaceCount)}${marker[node.type]} ${key}: ${toPrint(node[key], depth + 1)}\n`);
+      acc.push(`${separator.repeat(spaceCount)}${marker[node.nodeType]} ${key}: ${toPrint(node[key], depth + 1)}\n`);
 
       return acc;
     }, ['{\n']);
