@@ -1,152 +1,133 @@
 [
   {
-    "node": "common",
-    "valueBefore": [
+    "common": [
       {
-        "node": "follow",
-        "valueAfter": false,
-        "status": "added"
+        "follow": false,
+        "type": "added"
       },
       {
-        "node": "setting1",
-        "valueBefore": "Value 1",
-        "status": "unchanged"
+        "setting1": "Value 1",
+        "type": "unchanged"
       },
       {
-        "node": "setting2",
-        "valueBefore": 200,
-        "status": "removed"
+        "setting2": 200,
+        "type": "removed"
       },
       {
-        "node": "setting3",
-        "valueBefore": true,
-        "valueAfter": null,
-        "status": "updated"
+        "setting3": {
+          "valueDeleted": true,
+          "valueAdded": null
+        },
+        "type": "updated"
       },
       {
-        "node": "setting4",
-        "valueAfter": "blah blah",
-        "status": "added"
+        "setting4": "blah blah",
+        "type": "added"
       },
       {
-        "node": "setting5",
-        "valueAfter": [
+        "setting5": [
           {
-            "node": "key5",
-            "valueBefore": "value5",
-            "status": "unchanged"
+            "key5": "value5",
+            "type": "unchanged"
           }
         ],
-        "status": "added"
+        "type": "added"
       },
       {
-        "node": "setting6",
-        "valueBefore": [
+        "setting6": [
           {
-            "node": "doge",
-            "valueBefore": [
+            "doge": [
               {
-                "node": "wow",
-                "valueBefore": "",
-                "valueAfter": "so much",
-                "status": "updated"
+                "wow": {
+                  "valueDeleted": "",
+                  "valueAdded": "so much"
+                },
+                "type": "updated"
               }
             ],
-            "status": "unchanged"
+            "type": "unchanged"
           },
           {
-            "node": "key",
-            "valueBefore": "value",
-            "status": "unchanged"
+            "key": "value",
+            "type": "unchanged"
           },
           {
-            "node": "ops",
-            "valueAfter": "vops",
-            "status": "added"
+            "ops": "vops",
+            "type": "added"
           }
         ],
-        "status": "unchanged"
+        "type": "unchanged"
       }
     ],
-    "status": "unchanged"
+    "type": "unchanged"
   },
   {
-    "node": "group1",
-    "valueBefore": [
+    "group1": [
       {
-        "node": "baz",
-        "valueBefore": "bas",
-        "valueAfter": "bars",
-        "status": "updated"
+        "baz": {
+          "valueDeleted": "bas",
+          "valueAdded": "bars"
+        },
+        "type": "updated"
       },
       {
-        "node": "foo",
-        "valueBefore": "bar",
-        "status": "unchanged"
+        "foo": "bar",
+        "type": "unchanged"
       },
       {
-        "node": "nest",
-        "valueBefore": [
+        "nest": {
+          "valueDeleted": [
+            {
+              "key": "value",
+              "type": "unchanged"
+            }
+          ],
+          "valueAdded": "str"
+        },
+        "type": "updated"
+      }
+    ],
+    "type": "unchanged"
+  },
+  {
+    "group2": [
+      {
+        "abc": 12345,
+        "type": "unchanged"
+      },
+      {
+        "deep": [
           {
-            "node": "key",
-            "valueBefore": "value",
-            "status": "unchanged"
+            "id": 45,
+            "type": "unchanged"
           }
         ],
-        "valueAfter": "str",
-        "status": "updated"
+        "type": "unchanged"
       }
     ],
-    "status": "unchanged"
+    "type": "removed"
   },
   {
-    "node": "group2",
-    "valueBefore": [
+    "group3": [
       {
-        "node": "abc",
-        "valueBefore": 12345,
-        "status": "unchanged"
-      },
-      {
-        "node": "deep",
-        "valueBefore": [
+        "deep": [
           {
-            "node": "id",
-            "valueBefore": 45,
-            "status": "unchanged"
-          }
-        ],
-        "status": "unchanged"
-      }
-    ],
-    "status": "removed"
-  },
-  {
-    "node": "group3",
-    "valueAfter": [
-      {
-        "node": "deep",
-        "valueBefore": [
-          {
-            "node": "id",
-            "valueBefore": [
+            "id": [
               {
-                "node": "number",
-                "valueBefore": 45,
-                "status": "unchanged"
+                "number": 45,
+                "type": "unchanged"
               }
             ],
-            "status": "unchanged"
+            "type": "unchanged"
           }
         ],
-        "status": "unchanged"
+        "type": "unchanged"
       },
       {
-        "node": "fee",
-        "valueBefore": 100500,
-        "status": "unchanged"
+        "fee": 100500,
+        "type": "unchanged"
       }
     ],
-    "status": "added"
+    "type": "added"
   }
 ]

@@ -1,46 +1,38 @@
 import _ from 'lodash';
 
+const getRepeatIn = (type, count) => (type === 'unchanged' ? (count * 4) : (count * 4 - 2));
+
 export default (file) => {
   const marker = {
-    unchanged: ' ',
     added: '+',
     removed: '-',
   };
 
   const separator = ' ';
 
-  const toPrint = (data, depth) => {
-    const result = data.reduce((acc, AST) => {
-      const {
-        node,
-        valueBefore,
-        valueAfter,
-        status,
-      } = AST;
+  const toPrint = (AST, depth) => {
+    if (!_.isArray(AST)) {
+      return AST;
+    }
 
-      const getValue = (flag) => {
-        switch (flag) {
-          case 'added':
-            return !_.isArray(valueAfter) ? valueAfter : toPrint(valueAfter, depth + 1);
-          case 'removed':
-            return !_.isArray(valueBefore) ? valueBefore : toPrint(valueBefore, depth + 1);
-          default:
-            return !_.isArray(valueBefore) ? valueBefore : toPrint(valueBefore, depth + 1);
-        }
-      };
+    const result = AST.reduce((acc, node) => {
+      const entries = Object.keys(node);
+      const [key] = entries;
 
-      if (status === 'unchanged') {
-        acc.push(`${separator.repeat(depth * 4)}${node}: ${getValue(status)}\n`);
+      const spaceCount = getRepeatIn(node.type, depth);
+
+      if (node.type === 'unchanged') {
+        acc.push(`${separator.repeat(spaceCount)}${key}: ${toPrint(node[key], depth + 1)}\n`);
         return acc;
       }
 
-      if (status === 'updated') {
-        acc.push(`${separator.repeat(depth * 4 - 2)}${marker.removed} ${node}: ${getValue('removed')}\n`);
-        acc.push(`${separator.repeat(depth * 4 - 2)}${marker.added} ${node}: ${getValue('added')}\n`);
+      if (node.type === 'updated') {
+        acc.push(`${separator.repeat(spaceCount)}${marker.removed} ${key}: ${toPrint(node[key].valueDeleted, depth + 1)}\n`);
+        acc.push(`${separator.repeat(spaceCount)}${marker.added} ${key}: ${toPrint(node[key].valueAdded, depth + 1)}\n`);
         return acc;
       }
 
-      acc.push(`${separator.repeat(depth * 4 - 2)}${marker[status]} ${node}: ${getValue(status)}\n`);
+      acc.push(`${separator.repeat(spaceCount)}${marker[node.type]} ${key}: ${toPrint(node[key], depth + 1)}\n`);
 
       return acc;
     }, ['{\n']);

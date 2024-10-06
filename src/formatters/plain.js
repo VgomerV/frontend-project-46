@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const getPath = (AST) => {
+const getPath = (obj) => {
   const getFormatValue = (value) => {
     if (_.isObject(value)) {
       return '[complex value]';
@@ -8,18 +8,20 @@ const getPath = (AST) => {
     return typeof value === 'string' ? `'${value}'` : value;
   };
 
-  const { status } = AST;
+  const entries = Object.keys(obj);
+  const [key] = entries;
+
   const message = [];
 
-  switch (status) {
+  switch (obj.type) {
     case 'added':
-      message.push(`was added with value: ${getFormatValue(AST.valueAfter)}`);
+      message.push(`was added with value: ${getFormatValue(obj[key])}`);
       break;
     case 'removed':
       message.push('was removed');
       break;
     case 'updated':
-      message.push(`was updated. From ${getFormatValue(AST.valueBefore)} to ${getFormatValue(AST.valueAfter)}`);
+      message.push(`was updated. From ${getFormatValue(obj[key].valueDeleted)} to ${getFormatValue(obj[key].valueAdded)}`);
       break;
     default:
       break;
@@ -29,16 +31,20 @@ const getPath = (AST) => {
 };
 
 export default (file) => {
-  const toPrint = (data, arr) => {
-    const result = data.reduce((acc, item) => {
-      arr.push(item.node);
-      if (_.isArray(item.valueBefore) && item.status === 'unchanged') {
-        acc.push(toPrint(item.valueBefore, arr));
+  const toPrint = (AST, arr) => {
+    const result = AST.reduce((acc, node) => {
+      const entries = Object.keys(node);
+      const [key] = entries;
+
+      arr.push(key);
+
+      if (_.isArray(node[key]) && node.type === 'unchanged') {
+        acc.push(toPrint(node[key], arr));
         arr.pop();
         return acc;
       }
 
-      const [messages] = getPath(item);
+      const [messages] = getPath(node);
 
       const getFullMessage = messages.map((messge) => `Property '${arr.flat().join('.')}' ${messge}`);
 
