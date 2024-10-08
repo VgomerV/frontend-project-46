@@ -4,6 +4,7 @@ import plain from './plain.js';
 const formatters = {
   stylish,
   plain,
+  json: JSON.stringify,
 };
 
-export default (data, format = 'stylish') => (format === 'json' ? JSON.stringify(data, null, 2) : formatters[format](data));
+export default (data, format = 'stylish') => formatters[format](data);

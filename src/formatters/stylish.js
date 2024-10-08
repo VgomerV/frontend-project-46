@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const getRepeatIn = (type, count) => (type === 'unchanged' ? (count * 4) : (count * 4 - 2));
+const getRepeatIn = (type, count) => (type === 'unchanged' || type === 'nested' ? (count * 4) : (count * 4 - 2));
 
 export default (file) => {
   const marker = {
@@ -21,19 +21,18 @@ export default (file) => {
 
       const spaceCount = getRepeatIn(node.nodeType, depth);
 
-      if (node.nodeType === 'unchanged') {
-        acc.push(`${separator.repeat(spaceCount)}${key}: ${toPrint(node[key], depth + 1)}\n`);
-        return acc;
-      }
-
       if (node.nodeType === 'updated') {
         acc.push(`${separator.repeat(spaceCount)}${marker.removed} ${key}: ${toPrint(node[key].valueDeleted, depth + 1)}\n`);
         acc.push(`${separator.repeat(spaceCount)}${marker.added} ${key}: ${toPrint(node[key].valueAdded, depth + 1)}\n`);
         return acc;
       }
 
-      acc.push(`${separator.repeat(spaceCount)}${marker[node.nodeType]} ${key}: ${toPrint(node[key], depth + 1)}\n`);
+      if (Object.hasOwn(marker, node.nodeType)) {
+        acc.push(`${separator.repeat(spaceCount)}${marker[node.nodeType]} ${key}: ${toPrint(node[key], depth + 1)}\n`);
+        return acc;
+      }
 
+      acc.push(`${separator.repeat(spaceCount)}${key}: ${toPrint(node[key], depth + 1)}\n`);
       return acc;
     }, ['{\n']);
 

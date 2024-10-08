@@ -38,7 +38,7 @@ export default (file) => {
 
       arr.push(key);
 
-      if (_.isArray(node[key]) && node.nodeType === 'unchanged') {
+      if (_.isArray(node[key]) && node.nodeType === 'nested') {
         acc.push(toPrint(node[key], arr));
         arr.pop();
         return acc;

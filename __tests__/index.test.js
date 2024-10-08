@@ -12,5 +12,5 @@ const param = [
 ];
 
 test.each(param)('test genDiff, format - %s, formatter - %s', (format, formatter) => {
-  expect(genDiff(`file1.${format}`, `file2.${format}`, `${formatter}`)).toEqual(readFileSync(path.resolve('__fixtures__/', `result-${formatter}.txt`), 'utf-8'));
+  expect(genDiff(`__fixtures__/file1.${format}`, `__fixtures__/file2.${format}`, `${formatter}`)).toEqual(readFileSync(path.resolve('__fixtures__/', `result-${formatter}.txt`), 'utf-8'));
 });
