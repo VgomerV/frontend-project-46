@@ -3,13 +3,8 @@ import { readFileSync } from 'fs';
 import parsing from './parsers.js';
 import formatter from './formatters/index.js';
 
-const getAST = (data1, data2) => {
-  const keysFromFile1 = Object.keys(data1);
-  const keysFromFile2 = Object.keys(data2);
-
-  const keys = _.sortBy(_.union(keysFromFile1, keysFromFile2));
-
-  return keys.reduce((acc, key) => {
+const getAST = (data1, data2) => _.sortBy(_.union(Object.keys(data1), Object.keys(data2)))
+  .reduce((acc, key) => {
     const value1 = data1[key];
     const value2 = data2[key];
 
@@ -32,13 +27,12 @@ const getAST = (data1, data2) => {
       acc.push({
         [key]: { valueDeleted: value1, valueAdded: value2 }, nodeType: 'updated',
       });
-      return acc;
+    } else {
+      acc.push({ [key]: value1, nodeType: 'unchanged' });
     }
 
-    acc.push({ [key]: value1, nodeType: 'unchanged' });
     return acc;
   }, []);
-};
 
 const genDiff = (file1, file2, format) => {
   const getData = (file) => readFileSync(file, 'utf-8');

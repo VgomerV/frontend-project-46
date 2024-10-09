@@ -1,14 +1,11 @@
 import _ from 'lodash';
 
 const getSpaceCount = (type, count) => {
-  const count1 = count * 4;
-  const count2 = count * 4 - 2;
-
   const spaceValues = {
-    unchanged: count1,
-    nested: count1,
-    undefined: count1,
-    other: count2,
+    unchanged: count * 4,
+    nested: count * 4,
+    undefined: count * 4,
+    other: count * 4 - 2,
   };
 
   return Object.hasOwn(spaceValues, type) ? spaceValues[type] : spaceValues.other;
@@ -35,33 +32,24 @@ export default (file) => {
     }
 
     const result = AST.reduce((acc, node) => {
-      const keys = Object.keys(node);
-      const [key] = keys;
+      const [key] = Object.keys(node);
       const value = node[key];
 
       const spaceCount = getSpaceCount(node.nodeType, depth);
 
       if (node.nodeType === 'updated') {
-        const valueBefore = node[key].valueDeleted;
-        const valueAfter = node[key].valueAdded;
-
-        acc.push(`${separator.repeat(spaceCount)}${marker.removed} ${key}: ${toPrint(valueBefore, depth + 1)}\n`);
-        acc.push(`${separator.repeat(spaceCount)}${marker.added} ${key}: ${toPrint(valueAfter, depth + 1)}\n`);
+        acc.push(`${separator.repeat(spaceCount)}${marker.removed} ${key}: ${toPrint(node[key].valueDeleted, depth + 1)}\n`);
+        acc.push(`${separator.repeat(spaceCount)}${marker.added} ${key}: ${toPrint(node[key].valueAdded, depth + 1)}\n`);
         return acc;
       }
 
-      if (Object.hasOwn(marker, node.nodeType)) {
-        acc.push(`${separator.repeat(spaceCount)}${marker[node.nodeType]} ${key}: ${toPrint(value, depth + 1)}\n`);
-        return acc;
-      }
+      const hasMarker = Object.hasOwn(marker, node.nodeType);
 
-      acc.push(`${separator.repeat(spaceCount)}${key}: ${toPrint(value, depth + 1)}\n`);
+      acc.push(`${separator.repeat(spaceCount)}${hasMarker ? `${marker[node.nodeType]} ` : ''}${key}: ${toPrint(value, depth + 1)}\n`);
       return acc;
     }, ['{\n']);
 
-    result.push(`${separator.repeat(depth * 4 - 4)}}`);
-
-    return result.join('');
+    return [...result, `${separator.repeat(depth * 4 - 4)}}`].join('');
   };
 
   return toPrint(file, 1);
