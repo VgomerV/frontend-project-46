@@ -3,19 +3,6 @@ import { readFileSync } from 'fs';
 import parsing from './parsers.js';
 import formatter from './formatters/index.js';
 
-const iter = (value) => {
-  if (!_.isPlainObject(value)) {
-    return value;
-  }
-  const entries = Object.entries(value);
-  const result = entries.map((item) => {
-    const [nodeName, val] = item;
-    return { [nodeName]: iter(val), nodeType: 'unchanged' };
-  });
-
-  return result;
-};
-
 const getAST = (data1, data2) => {
   const keysFromFile1 = Object.keys(data1);
   const keysFromFile2 = Object.keys(data2);
@@ -27,12 +14,12 @@ const getAST = (data1, data2) => {
     const value2 = data2[key];
 
     if (!Object.hasOwn(data1, key)) {
-      acc.push({ [key]: iter(value2), nodeType: 'added' });
+      acc.push({ [key]: value2, nodeType: 'added' });
       return acc;
     }
 
     if (!Object.hasOwn(data2, key)) {
-      acc.push({ [key]: iter(value1), nodeType: 'removed' });
+      acc.push({ [key]: value1, nodeType: 'removed' });
       return acc;
     }
 
@@ -43,7 +30,7 @@ const getAST = (data1, data2) => {
 
     if (!_.isEqual(value1, value2)) {
       acc.push({
-        [key]: { valueDeleted: iter(value1), valueAdded: iter(value2) }, nodeType: 'updated',
+        [key]: { valueDeleted: value1, valueAdded: value2 }, nodeType: 'updated',
       });
       return acc;
     }
