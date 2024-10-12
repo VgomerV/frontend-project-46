@@ -1,24 +1,8 @@
 import _ from 'lodash';
 
-const getSpaceCount = (type, count) => {
-  const spaceValues = {
-    unchanged: count * 4,
-    nested: count * 4,
-    undefined: count * 4,
-    other: count * 4 - 2,
-  };
-
-  return Object.hasOwn(spaceValues, type) ? spaceValues[type] : spaceValues.other;
-};
+const getIndent = (depth, spacesCount = 4) => depth * spacesCount - 2;
 
 export default (file) => {
-  const marker = {
-    added: '+',
-    removed: '-',
-  };
-
-  const separator = ' ';
-
   const toPrint = (AST, depth) => {
     if (_.isPlainObject(AST)) {
       const result = Object.entries(AST)
@@ -35,21 +19,27 @@ export default (file) => {
       const [key] = Object.keys(node);
       const value = node[key];
 
-      const spaceCount = getSpaceCount(node.nodeType, depth);
-
-      if (node.nodeType === 'updated') {
-        acc.push(`${separator.repeat(spaceCount)}${marker.removed} ${key}: ${toPrint(node[key].valueDeleted, depth + 1)}\n`);
-        acc.push(`${separator.repeat(spaceCount)}${marker.added} ${key}: ${toPrint(node[key].valueAdded, depth + 1)}\n`);
+      if (node.nodeType === 'added') {
+        acc.push(`${' '.repeat(getIndent(depth))}+ ${key}: ${toPrint(value, depth + 1)}\n`);
         return acc;
       }
 
-      const hasMarker = Object.hasOwn(marker, node.nodeType);
+      if (node.nodeType === 'removed') {
+        acc.push(`${' '.repeat(getIndent(depth))}- ${key}: ${toPrint(value, depth + 1)}\n`);
+        return acc;
+      }
 
-      acc.push(`${separator.repeat(spaceCount)}${hasMarker ? `${marker[node.nodeType]} ` : ''}${key}: ${toPrint(value, depth + 1)}\n`);
+      if (node.nodeType === 'updated') {
+        acc.push(`${' '.repeat(getIndent(depth))}- ${key}: ${toPrint(value.valueDeleted, depth + 1)}\n`);
+        acc.push(`${' '.repeat(getIndent(depth))}+ ${key}: ${toPrint(value.valueAdded, depth + 1)}\n`);
+        return acc;
+      }
+
+      acc.push(`${' '.repeat(getIndent(depth))}  ${key}: ${toPrint(value, depth + 1)}\n`);
       return acc;
     }, ['{\n']);
 
-    return [...result, `${separator.repeat(depth * 4 - 4)}}`].join('');
+    return [...result, `${' '.repeat(getIndent(depth) - 2)}}`].join('');
   };
 
   return toPrint(file, 1);
