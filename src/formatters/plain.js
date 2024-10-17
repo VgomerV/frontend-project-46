@@ -7,8 +7,8 @@ const getFormatValue = (value) => {
   return typeof value === 'string' ? `'${value}'` : value;
 };
 
-const plain = (AST, path = '') => {
-  const result = AST.reduce((acc, node) => {
+const plain = (tree, path = '') => {
+  const result = tree.reduce((acc, node) => {
     const [key] = Object.keys(node);
     switch (node.nodeType) {
       case 'added':

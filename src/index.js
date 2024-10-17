@@ -1,9 +1,16 @@
 import _ from 'lodash';
 import { readFileSync } from 'fs';
+import path from 'path';
 import parsing from './parsers.js';
 import formatter from './formatters/index.js';
 
-const getAST = (data1, data2) => _.sortBy(_.union(Object.keys(data1), Object.keys(data2)))
+const getData = (pathToFile) => {
+  const absolutePath = path.resolve(process.cwd(), pathToFile);
+
+  return readFileSync(absolutePath, 'utf-8');
+};
+
+const getTree = (data1, data2) => _.sortBy(_.union(Object.keys(data1), Object.keys(data2)))
   .reduce((acc, key) => {
     const value1 = data1[key];
     const value2 = data2[key];
@@ -19,7 +26,7 @@ const getAST = (data1, data2) => _.sortBy(_.union(Object.keys(data1), Object.key
     }
 
     if (_.isPlainObject(value1) && _.isPlainObject(value2)) {
-      acc.push({ [key]: getAST(value1, value2), nodeType: 'nested' });
+      acc.push({ [key]: getTree(value1, value2), nodeType: 'nested' });
       return acc;
     }
 
@@ -34,16 +41,14 @@ const getAST = (data1, data2) => _.sortBy(_.union(Object.keys(data1), Object.key
     return acc;
   }, []);
 
-const genDiff = (file1, file2, format) => {
-  const getData = (file) => readFileSync(file, 'utf-8');
-
+const genDiff = (file1, file2, format = 'stylish') => {
   const extensionFile1 = file1.split('.')[1];
   const extensionFile2 = file1.split('.')[1];
 
   const parsedData1 = parsing(getData(file1), extensionFile1);
   const parsedData2 = parsing(getData(file2), extensionFile2);
 
-  return formatter(getAST(parsedData1, parsedData2), format);
+  return formatter(getTree(parsedData1, parsedData2), format);
 };
 
 export default genDiff;
