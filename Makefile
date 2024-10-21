@@ -14,3 +14,6 @@ test:
 
 test-coverage:
 	npm test -- --coverage --coverageProvider=v8
+
+run:
+	gendiff -f stylish __fixtures__/file1.json __fixtures__/file2.json

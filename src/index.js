@@ -16,29 +16,21 @@ const getTree = (data1, data2) => _.sortBy(_.union(Object.keys(data1), Object.ke
     const value2 = data2[key];
 
     if (!Object.hasOwn(data1, key)) {
-      acc.push({ [key]: value2, nodeType: 'added' });
-      return acc;
+      return [...acc, { [key]: value2, nodeType: 'added' }];
     }
 
     if (!Object.hasOwn(data2, key)) {
-      acc.push({ [key]: value1, nodeType: 'removed' });
-      return acc;
+      return [...acc, { [key]: value1, nodeType: 'removed' }];
     }
 
     if (_.isPlainObject(value1) && _.isPlainObject(value2)) {
-      acc.push({ [key]: getTree(value1, value2), nodeType: 'nested' });
-      return acc;
+      return [...acc, { [key]: getTree(value1, value2), nodeType: 'nested' }];
     }
 
     if (!_.isEqual(value1, value2)) {
-      acc.push({
-        [key]: { valueDeleted: value1, valueAdded: value2 }, nodeType: 'updated',
-      });
-    } else {
-      acc.push({ [key]: value1, nodeType: 'unchanged' });
+      return [...acc, { [key]: { valueDeleted: value1, valueAdded: value2 }, nodeType: 'updated' }];
     }
-
-    return acc;
+    return [...acc, { [key]: value1, nodeType: 'unchanged' }];
   }, []);
 
 const genDiff = (filepath1, filepath2, format = 'stylish') => {

@@ -12,19 +12,15 @@ const plain = (tree, path = '') => {
     const [key] = Object.keys(node);
     switch (node.nodeType) {
       case 'added':
-        acc.push(`Property '${path}${key}' was added with value: ${getFormatValue(node[key])}`);
-        return acc;
+        return [...acc, `Property '${path}${key}' was added with value: ${getFormatValue(node[key])}`];
       case 'removed':
-        acc.push(`Property '${path}${key}' was removed`);
-        return acc;
+        return [...acc, `Property '${path}${key}' was removed`];
       case 'updated':
-        acc.push(`Property '${path}${key}' was updated. From ${getFormatValue(node[key].valueDeleted)} to ${getFormatValue(node[key].valueAdded)}`);
-        return acc;
+        return [...acc, `Property '${path}${key}' was updated. From ${getFormatValue(node[key].valueDeleted)} to ${getFormatValue(node[key].valueAdded)}`];
       case 'unchanged':
         return acc;
       case 'nested':
-        acc.push(plain(node[key], `${path + key}.`));
-        return acc;
+        return [...acc, plain(node[key], `${path + key}.`)];
       default:
         return acc;
     }
