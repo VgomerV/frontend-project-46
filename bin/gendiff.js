@@ -10,7 +10,7 @@ program
   .version('0.0.1')
   .arguments('<filepath1> <filepath2>')
   .option('-f, --format <type>', 'output format: stylish, plain, json', 'stylish')
-  .action((filepath1, filepath2, options) => {
-    console.log(genDiff(filepath1, filepath2, program.opts(options).format));
+  .action((filepath1, filepath2) => {
+    console.log(genDiff(filepath1, filepath2, program.opts().format));
   })
   .parse(process.argv);
