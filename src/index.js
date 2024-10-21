@@ -41,12 +41,12 @@ const getTree = (data1, data2) => _.sortBy(_.union(Object.keys(data1), Object.ke
     return acc;
   }, []);
 
-const genDiff = (file1, file2, format = 'stylish') => {
-  const extensionFile1 = file1.split('.')[1];
-  const extensionFile2 = file1.split('.')[1];
+const genDiff = (filepath1, filepath2, format = 'stylish') => {
+  const extensionFile1 = filepath1.split('.')[1];
+  const extensionFile2 = filepath2.split('.')[1];
 
-  const parsedData1 = parsing(getData(file1), extensionFile1);
-  const parsedData2 = parsing(getData(file2), extensionFile2);
+  const parsedData1 = parsing(getData(filepath1), extensionFile1);
+  const parsedData2 = parsing(getData(filepath2), extensionFile2);
 
   return formatter(getTree(parsedData1, parsedData2), format);
 };

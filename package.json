@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "description": "[![Actions Status](https://github.com/VgomerV/frontend-project-46/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/VgomerV/frontend-project-46/actions) [![Maintainability](https://api.codeclimate.com/v1/badges/b7a75ce6c141523bc047/maintainability)](https://codeclimate.com/github/VgomerV/frontend-project-46/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/b7a75ce6c141523bc047/test_coverage)](https://codeclimate.com/github/VgomerV/frontend-project-46/test_coverage)",
-  "main": "bin/gendiff.js",
+  "main": "src/index.js",
   "bin": {
     "gendiff": "bin/gendiff.js"
   },
