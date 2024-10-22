@@ -11,6 +11,11 @@ const param = [
   ['yaml', 'json'],
 ];
 
-test.each(param)('test genDiff, extension - %s', (extension, formatter) => {
-  expect(genDiff(`__fixtures__/file1.${extension}`, `__fixtures__/file2.${extension}`, `${formatter}`)).toEqual(readFileSync(path.resolve('__fixtures__/', `result-${formatter}.txt`), 'utf-8'));
+const getPath = (formatterName) => path.resolve('__fixtures__/', `result-${formatterName}.txt`);
+
+test.each(param)('test genDiff', (extension, formatter) => {
+  const expected = readFileSync(getPath(formatter), 'utf-8');
+  const received = genDiff(`__fixtures__/file1.${extension}`, `__fixtures__/file2.${extension}`, `${formatter}`);
+
+  expect(received).toEqual(expected);
 });
